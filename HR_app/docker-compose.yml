@@ -1,0 +1,49 @@
+# version: '3.8' # Указываем версию синтаксиса Docker Compose
+
+services:
+  # Сервис базы данных PostgreSQL
+  db:
+    image: postgres:16-alpine # Используем официальный образ PostgreSQL (версия 16, на базе Alpine)
+    container_name: my_hr_db_container
+    restart: always # Автоматически перезапускать контейнер, если он упадет
+    environment:
+      # Эти переменные используются образом postgres для инициализации БД
+      POSTGRES_USER: ${DB_USER:-my_hr_user}         # Имя пользователя БД
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-mysecretpassword} # Пароль пользователя БД
+      POSTGRES_DB: ${DB_NAME:-my_hr_db}           # Имя базы данных
+    volumes:
+      # Том для сохранения данных PostgreSQL между перезапусками контейнера
+      - pgdata:/var/lib/postgresql/data
+      # Монтируем schema.sql для автоматического создания таблиц при первом запуске
+      # Файлы в /docker-entrypoint-initdb.d/ исполняются по алфавиту
+      - ./schema.sql:/docker-entrypoint-initdb.d/init_schema.sql
+    ports:
+      # Пробрасываем порт PostgreSQL на хост-машину (опционально, для доступа извне Docker, например, через pgAdmin)
+      # Формат: <порт_на_хосте>:<порт_в_контейнере>
+      - "5433:5432" # Использую 5433 на хосте, чтобы не конфликтовать с локально установленным PostgreSQL на 5432
+    healthcheck: # Проверка состояния БД перед тем, как приложение от нее будет зависеть
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-my_hr_user} -d ${DB_NAME:-my_hr_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Сервис Go-приложения
+  app:
+    build: . # Собирать образ из Dockerfile в текущей директории
+    container_name: my_hr_app_container
+    restart: on-failure # Перезапускать, если приложение завершится с ошибкой
+    depends_on:
+      db: # Указываем, что сервис app зависит от сервиса db
+        condition: service_healthy # Запускать app только после того, как db будет "здоров" (пройдет healthcheck)
+    environment:
+      # Передаем переменные окружения в Go-приложение для подключения к БД
+      # Важно: DB_HOST теперь 'db' - это имя сервиса PostgreSQL в Docker Compose сети
+      DB_HOST: db
+      DB_PORT: 5432 # PostgreSQL внутри Docker сети слушает на стандартном порту 5432
+      DB_USER: ${DB_USER:-my_hr_user}
+      DB_PASSWORD: ${DB_PASSWORD:-mysecretpassword}
+      DB_NAME: ${DB_NAME:-my_hr_db}
+      DB_SSLMODE: "disable" # Для внутренней сети Docker обычно sslmode=disable
+
+volumes:
+  pgdata: # Именованный том для хранения данных PostgreSQL

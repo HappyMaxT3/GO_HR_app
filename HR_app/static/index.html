@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR База Данных</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        #main-menu, #data-display { margin-top: 20px; padding: 15px; border: 1px solid #ccc; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Система Управления Персоналом</h1>
+
+    <div id="main-menu">
+        <h2>Доступные таблицы (Пока без ролей)</h2>
+        <button onclick="fetchData('employees')">Показать сотрудников</button>
+        <button onclick="fetchData('departments')">Показать отделы</button>
+        </div>
+
+    <div id="data-display">
+        <h2>Результаты запроса:</h2>
+        <div id="table-container">
+            <p>Выберите опцию выше, чтобы увидеть данные.</p>
+        </div>
+    </div>
+
+<script>
+    async function fetchData(tableName) {
+        try {
+            const response = await fetch(`/api/data?table=${tableName}`);
+            const data = await response.json(); 
+
+            const tableContainer = document.getElementById('table-container');
+            tableContainer.innerHTML = ''; // Очищаем предыдущие данные
+
+            if (data && data.error) { 
+                tableContainer.innerHTML = `<p style="color: red;">Ошибка сервера: ${data.error}</p>`;
+                console.error("Ошибка от сервера:", data.error);
+                return;
+            }
+
+            if (data.length === 0) {
+                tableContainer.innerHTML = '<p>Нет данных для отображения.</p>';
+                return;
+            }
+
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            const headers = Object.keys(data[0]);
+            const headerRow = document.createElement('tr');
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Строки таблицы (данные)
+            data.forEach(rowData => {
+                const row = document.createElement('tr');
+                headers.forEach(header => {
+                    const td = document.createElement('td');
+                    td.textContent = rowData[header]; 
+                    row.appendChild(td);
+                });
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+            tableContainer.appendChild(table);
+
+        } catch (error) {
+            console.error('Ошибка при получении или обработке данных:', error);
+            document.getElementById('table-container').innerHTML =
+                '<p style="color: red;">Произошла ошибка при загрузке данных. Проверьте консоль.</p>';
+        }
+    }
+</script>
+</body>
+</html>

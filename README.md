@@ -34,13 +34,48 @@ The easiest way to run this application is using Docker Compose. Follow these st
 
     This command will build the Docker image for the Go application (if it hasn't been built before), create and start the PostgreSQL database container (`my_hr_db_container` 🐘), and the Go application container (`my_hr_app_container` ⚙️). The `-d` flag can be added to run the containers in detached mode (in the background 😴).
 
-3.  **Accessing the application:** Once the containers are running, you can interact with the Go application. If you didn't use the `-d` flag, you should see the application's main menu in your terminal. If you ran it in detached mode, you can attach to the application container to see the output and provide input:
+3.  **Accessing the application:** Once the containers are running, you can open your web browser and navigate to:
+
+    ```
+    http://localhost:8080
+    ```
+
+    If you ran Docker Compose without the `-d` flag, you'll see the application's logs directly in your terminal. If you ran in detached mode, you can view the logs:
+
+    ```bash
+    docker-compose logs -f
+    ```
+    To attach to a specific container (e.g., the Go application) to see its real-time output (useful for debugging):
 
     ```bash
     docker attach my_hr_app_container
     ```
+    To detach from a container without stopping it, press `Ctrl+P` followed by `Ctrl+Q`. 👋
 
-    To detach from the container without stopping it, press `Ctrl+P` followed by `Ctrl+Q`. 👋
+### Restarting the Application 🔄
+
+If you make changes to your Go code, `Dockerfile`, `docker-compose.yml`, or `schema.sql`, you'll likely need to rebuild and restart your containers.
+
+* **Standard Restart:**
+    ```bash
+    docker-compose restart
+    ```
+    This will restart all services. However, it won't re-apply database schema changes or rebuild images unless you specify it.
+
+* **Rebuilding and Restarting (for code/Dockerfile changes):**
+    ```bash
+    docker-compose up --build
+    ```
+    This command rebuilds the application image if changes are detected in the `Dockerfile` or source code, and then restarts the services.
+
+* **Full Clean Restart (for `schema.sql` changes or to re-initialize the database):**
+    If you've modified `schema.sql` (e.g., added new tables, changed existing ones, or added initial data `INSERT` statements) and want these changes to apply to a fresh database, you must remove the old database volume.
+
+    ```bash
+    docker-compose down -v
+    docker-compose up --build
+    ```
+    The `-v` flag in `docker-compose down` removes Docker volumes associated with your services (like the `pgdata` volume for PostgreSQL). This ensures that PostgreSQL starts with an empty data directory and re-runs `schema.sql` on the next `docker-compose up`.
 
 ## Configuration ⚙️
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR База Данных</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="role-selector" class="panel">
+        <h2>Выберите роль:</h2>
+        <button onclick="setRole('Сотрудник')">Сотрудник</button>
+        <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
+        <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
+        <button onclick="setRole('Администраторы отделов')">Администратор отдела</button>
+        <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
+        <button onclick="setRole('Руководство организации')">Руководство организации</button>
+        <p>Активная роль: <span id="current-role">Не выбрана</span></p>
+    </div>
+
+    <h1>Система Управления Персоналом</h1>
+
+    <div class="container-wrapper">
+        <div id="main-menu" class="panel">
+            <h2>Доступные таблицы</h2>
+            <div id="table-buttons-container"></div>
+            <p>Выбрана таблица: <span id="current-table-name">Не выбрана</span></p>
+            <hr>
+            <h3>Редактирование данных</h3>
+            <p>Выберите таблицу для редактирования:</p>
+            <div id="editable-table-buttons-container"></div>
+        </div>
+
+        <div id="crud-panel" class="panel">
+            <h2>Управление данными (<span id="crud-table-name">Не выбрана</span>)</h2>
+            <div class="crud-actions">
+                <button id="add-button" onclick="showForm('add')">Добавить запись</button>
+                <button id="update-button" onclick="showForm('update')">Изменить запись</button>
+                <button id="delete-button" onclick="showForm('delete')">Удалить запись</button>
+            </div>
+            <div id="crud-form-container">
+                <p>Выберите действие.</p>
+            </div>
+        </div>
+
+        <div id="editable-data-panel" class="panel">
+            <h2>Редактируемые данные: <span id="editable-table-name">Не выбрана</span></h2>
+            <div id="editable-table-container">
+                <p>Выберите таблицу для редактирования.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="data-display" class="panel">
+        <h2>Результаты запроса:</h2>
+        <div id="table-container">
+            <p>Выберите опцию выше, чтобы увидеть данные.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

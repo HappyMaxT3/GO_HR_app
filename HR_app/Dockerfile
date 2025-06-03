@@ -13,10 +13,14 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /app/my_hr_app_bi
 
 FROM alpine:latest
 
-COPY --from=builder /app/my_hr_app_binary /my_hr_app_binary
+RUN apk --no-cache add ca-certificates
 
-COPY --from=builder /app/static /static
+COPY --from=builder /app/my_hr_app_binary /app/my_hr_app_binary
 
-CMD ["/my_hr_app_binary"]
+COPY --from=builder /app/web /app/web
+
+WORKDIR /app
+
+CMD ["./my_hr_app_binary"]
 
 EXPOSE 8080

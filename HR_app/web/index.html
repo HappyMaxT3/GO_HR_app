@@ -8,7 +8,12 @@
 </head>
 <body>
     <div id="role-selector" class="panel">
-        <h2>Выберите роль:</h2>
+        <div class="role-selector-header">
+            <h2>Выберите роль:</h2>
+            <button id="theme-toggle" class="theme-toggle-button" title="Переключить тему">
+                <span class="theme-icon"></span>
+            </button>
+        </div>
         <button onclick="setRole('Сотрудник')">Сотрудник</button>
         <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
         <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>

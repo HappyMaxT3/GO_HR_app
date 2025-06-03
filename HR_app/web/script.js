@@ -869,6 +869,14 @@ function formatForDateInput(dateString) {
     return '';
 }
 
+// --- Функции для ТЕМНОЙ ТЕМЫ ---
+function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-theme'); // Переключаем класс 'dark-theme'
+    const isDarkTheme = body.classList.contains('dark-theme');
+    localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light'); // Сохраняем выбор в localStorage
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     const savedRole = localStorage.getItem('selectedRole');
@@ -882,6 +890,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('add-button').onclick = () => showForm('add');
     document.getElementById('update-button').onclick = () => showForm('update');
     document.getElementById('delete-button').onclick = () => showForm('delete');
+
+    // Загрузка темы из localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+
+    // Привязка обработчика к кнопке переключения темы
+    const themeToggleButton = document.getElementById('theme-toggle');
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', toggleTheme);
+    }
 
     clearPanels();
 });

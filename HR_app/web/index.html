@@ -7,19 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <button id="theme-toggle" class="theme-toggle-button" title="Переключить тему">
+        <span class="theme-icon"></span>
+    </button>
+
     <div id="role-selector" class="panel">
         <div class="role-selector-header">
             <h2>Выберите роль:</h2>
-            <button id="theme-toggle" class="theme-toggle-button" title="Переключить тему">
-                <span class="theme-icon"></span>
-            </button>
-        </div>
-        <button onclick="setRole('Сотрудник')">Сотрудник</button>
-        <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
-        <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
-        <button onclick="setRole('Администраторы отделов')">Администратор отдела</button>
-        <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
-        <button onclick="setRole('Руководство организации')">Руководство организации</button>
+            </div>
+        <button id="role-employee" onclick="setRole('Сотрудник')">Сотрудник</button>
+        <button id="role-hr" onclick="setRole('HR-менеджер')">HR-менеджер</button>
+        <button id="role-head" onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
+        <button id="role-admin" onclick="setRole('Администраторы отделов')">Администратор отдела</button>
+        <button id="role-finance" onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
+        <button id="role-management" onclick="setRole('Руководство организации')">Руководство организации</button>
         <p>Активная роль: <span id="current-role">Не выбрана</span></p>
     </div>
 
@@ -62,6 +63,27 @@
             <p>Выберите опцию выше, чтобы увидеть данные.</p>
         </div>
     </div>
+
+    <footer class="site-footer panel">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>Разработчики</h3>
+                <p>Толмачев Максим Сергеевич</p>
+                <p>Гудкова Ксения Дмитриевна</p>
+                <p>Акимов Андрей Андреевич</p>
+            </div>
+            <div class="footer-section links">
+                <h3>Полезные ссылки</h3>
+                <ul>
+                    <li><a href="ссылка_на_доку" target="_blank">Документация проекта</a></li>
+                    <li><a href="https://github.com/HappyMaxT3/GO_HR_app" target="_blank">GitHub Проекта</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Система Управления Персоналом. Все права защищены.
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

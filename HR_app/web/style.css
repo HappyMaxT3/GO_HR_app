@@ -8,6 +8,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 /* --- Контейнер для основных панелей --- */
@@ -18,6 +19,7 @@ body {
     justify-content: flex-start;
     margin-bottom: 20px;
     flex-grow: 1;
+    align-items: flex-start;
 }
 
 /* --- Общие стили для всех панелей --- */
@@ -269,6 +271,11 @@ td[contenteditable="true"]:focus {
 
 /* --- Стили для кнопки переключения темы (круглая и тематическая) --- */
 .theme-toggle-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+
     width: 40px;
     height: 40px;
     border-radius: 50%;

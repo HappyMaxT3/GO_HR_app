@@ -6,40 +6,33 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/jackc/pgx/v5/stdlib" // PostgreSQL driver
+	_ "github.com/jackc/pgx/v5/stdlib" // Драйвер PostgreSQL
 )
 
 func main() {
-	// Загрузка конфигурации
-	cfg := LoadConfig()
+	cfg := LoadConfig() // Загрузка конфигурации
 
-	// Инициализация подключения к БД
-	db, err := InitDB(cfg)
+	db, err := InitDB(cfg) // Инициализация БД
 	if err != nil {
-		log.Fatalf("Не удалось инициализировать базу данных: %v", err)
+		log.Fatalf("Ошибка инициализации БД: %v", err)
 	}
 	defer db.Close()
-	fmt.Println("Успешно подключено к базе данных PostgreSQL!")
+	fmt.Println("Успешно подключено к БД!")
 
-	// Настройка HTTP-сервера
-	setupRoutes(db)
+	setupRoutes(db) // Настройка HTTP-маршрутов
 
-	fmt.Printf("Сервер запущен на :%s. Откройте http://localhost:%s в браузере.\n", cfg.AppPort, cfg.AppPort)
+	fmt.Printf("Сервер запущен на :%s. Откройте http://localhost:%s.\n", cfg.AppPort, cfg.AppPort)
 	log.Fatal(http.ListenAndServe(":"+cfg.AppPort, nil))
 }
 
-// setupRoutes настраивает все маршруты HTTP
+// setupRoutes настраивает HTTP-маршруты.
 func setupRoutes(db *sql.DB) {
-	// Обслуживание статических файлов
-	fs := http.FileServer(http.Dir("./web"))
-	http.Handle("/", fs)
+	http.Handle("/", http.FileServer(http.Dir("./web"))) // Обслуживание статики
 
-	// API для чтения данных (GET)
-	http.HandleFunc("/api/data", getDataHandler(db))
+	http.HandleFunc("/api/data", getDataHandler(db))               // API для чтения
+	http.HandleFunc("/api/validate-role", validateRoleHandler(db)) // API для проверки роли
 
-	// API для проверки роли (POST)
-	http.HandleFunc("/api/validate-role", validateRoleHandler(db))
-	// API для CRUD операций (POST, PUT, DELETE)
+	// API для CRUD операций
 	http.HandleFunc("/api/employees", crudHandler(db, "employees"))
 	http.HandleFunc("/api/departments", crudHandler(db, "departments"))
 	http.HandleFunc("/api/positions", crudHandler(db, "positions"))

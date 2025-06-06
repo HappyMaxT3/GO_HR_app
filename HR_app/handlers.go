@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 // getDataHandler handles GET requests for table data.
@@ -91,5 +93,105 @@ func crudHandler(db *sql.DB, tableName string) http.HandlerFunc {
 		}
 
 		json.NewEncoder(w).Encode(map[string]string{"message": message})
+	}
+}
+
+// roleToPositionMap сопоставляет роли интерфейса с должностями в БД.
+var roleToPositionMap = map[string][]string{
+	"HR-менеджер":             {"Руководитель отдела HR", "HR-специалист"},
+	"Руководитель отдела":       {"Руководитель отдела IT", "Руководитель отдела HR", "Генеральный директор"}, // Добавим сюда и CEO
+	"Администраторы отделов":    {"Руководитель отдела IT", "Руководитель отдела HR"},                       // Предположим, что это руководители
+	"Финансовый отдел":        {"Бухгалтер"},
+	"Руководство организации": {"Генеральный директор"},
+}
+
+// checkRolePermission проверяет, имеет ли сотрудник с данной должностью доступ к запрашиваемой роли.
+func checkRolePermission(requestedRole, userPosition string) bool {
+	// Роль "Сотрудник" доступна любому вошедшему в систему сотруднику.
+	if requestedRole == "Сотрудник" {
+		return true
+	}
+
+	allowedPositions, ok := roleToPositionMap[requestedRole]
+	if !ok {
+		// Если роль не найдена в карте, доступ запрещен.
+		return false
+	}
+
+	// Проверяем прямое соответствие должности.
+	for _, position := range allowedPositions {
+		if userPosition == position {
+			return true
+		}
+	}
+
+	// Дополнительная логика для составных ролей, например, "Руководитель отдела".
+	// Если должность пользователя начинается с "Руководитель отдела", даем доступ к этой роли.
+	if requestedRole == "Руководитель отдела" && strings.HasPrefix(userPosition, "Руководитель отдела") {
+		return true
+	}
+
+	return false
+}
+
+// validateRoleHandler обрабатывает запросы на проверку прав доступа к роли.
+func validateRoleHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		if r.Method != "POST" {
+			http.Error(w, `{"error": "Поддерживается только метод POST"}`, http.StatusMethodNotAllowed)
+			return
+		}
+
+		var req struct {
+			EmployeeID string `json:"employee_id"`
+			Role       string `json:"role"`
+		}
+
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, `{"error": "Неверный формат запроса"}`, http.StatusBadRequest)
+			return
+		}
+
+		// Валидация входных данных
+		if req.EmployeeID == "" || req.Role == "" {
+			http.Error(w, `{"error": "Параметры 'employee_id' и 'role' обязательны"}`, http.StatusBadRequest)
+			return
+		}
+
+		employeeID, err := strconv.Atoi(req.EmployeeID)
+		if err != nil {
+			http.Error(w, `{"error": "Табельный номер должен быть числом"}`, http.StatusBadRequest)
+			return
+		}
+
+		// Получаем данные сотрудника из БД
+		employee, err := GetEmployeeByID(db, employeeID)
+		if err != nil {
+			// Логируем ошибку, но пользователю отдаем общее сообщение
+			log.Printf("Ошибка при поиске сотрудника: %v", err)
+			http.Error(w, `{"error": "Внутренняя ошибка сервера"}`, http.StatusInternalServerError)
+			return
+		}
+
+		// Проверяем, найден ли сотрудник
+		if employee == nil {
+			http.Error(w, `{"error": "Сотрудника с таким табельным номером не существует."}`, http.StatusNotFound)
+			return
+		}
+
+		// Проверяем права на основе должности
+		if !checkRolePermission(req.Role, employee.P_NAME) {
+			http.Error(w, `{"error": "У вас недостаточно прав для доступа к этой роли."}`, http.StatusForbidden)
+			return
+		}
+
+		// Если все проверки пройдены
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"success": true,
+			"message": "Доступ разрешен.",
+		})
 	}
 }

@@ -14,13 +14,17 @@
     <div id="role-selector" class="panel">
         <div class="role-selector-header">
             <h2>Выберите роль:</h2>
-            </div>
-        <button id="role-employee" onclick="setRole('Сотрудник')">Сотрудник</button>
-        <button id="role-hr" onclick="setRole('HR-менеджер')">HR-менеджер</button>
-        <button id="role-head" onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
-        <button id="role-admin" onclick="setRole('Администраторы отделов')">Администратор отдела</button>
-        <button id="role-finance" onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
-        <button id="role-management" onclick="setRole('Руководство организации')">Руководство организации</button>
+            <button id="theme-toggle" class="theme-toggle-button" title="Переключить тему">
+                <span class="theme-icon"></span>
+            </button>
+        </div>
+        <button onclick="setRole('старт')">Роль не выбрана</button>
+        <button onclick="setRole('Сотрудник')">Сотрудник</button>
+        <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
+        <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
+        <button onclick="setRole('Администраторы отделов')">Администратор отдела</button>
+        <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
+        <button onclick="setRole('Руководство организации')">Руководство организации</button>
         <p>Активная роль: <span id="current-role">Не выбрана</span></p>
     </div>
 

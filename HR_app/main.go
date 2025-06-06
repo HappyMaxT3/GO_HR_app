@@ -37,6 +37,8 @@ func setupRoutes(db *sql.DB) {
 	// API для чтения данных (GET)
 	http.HandleFunc("/api/data", getDataHandler(db))
 
+	// API для проверки роли (POST)
+	http.HandleFunc("/api/validate-role", validateRoleHandler(db))
 	// API для CRUD операций (POST, PUT, DELETE)
 	http.HandleFunc("/api/employees", crudHandler(db, "employees"))
 	http.HandleFunc("/api/departments", crudHandler(db, "departments"))

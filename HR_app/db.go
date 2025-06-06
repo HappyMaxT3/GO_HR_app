@@ -138,6 +138,31 @@ func InitDB(cfg *Config) (*sql.DB, error) {
 	return db, nil
 }
 
+// Возвращает (nil, nil), если сотрудник не найден.
+func GetEmployeeByID(db *sql.DB, employeeID int) (*Employee, error) {
+	query := "SELECT e_id, d_id, e_fname, e_lname, e_pasp, e_date, e_given, e_gender, e_inn, e_snils, e_born, e_hire, p_name FROM employees WHERE e_id = $1"
+	row := db.QueryRow(query, employeeID)
+
+	var emp Employee
+	// Используем sql.NullString и т.д. для полей, которые могут быть NULL, если это применимо
+	err := row.Scan(
+		&emp.E_ID, &emp.D_ID, &emp.E_FNAME, &emp.E_LNAME, &emp.E_PASP,
+		&emp.E_DATE, &emp.E_GIVEN, &emp.E_GENDER, &emp.E_INN, &emp.E_SNILS,
+		&emp.E_BORN, &emp.E_HIRE, &emp.P_NAME,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// Это не ошибка приложения, а ожидаемый результат "не найдено"
+			return nil, nil
+		}
+		// Это настоящая ошибка (проблема с БД, и т.д.)
+		return nil, fmt.Errorf("ошибка при поиске сотрудника с ID %d: %w", employeeID, err)
+	}
+
+	return &emp, nil
+}
+
 // GenericGetTableData получает данные из любой таблицы (или представления).
 func GenericGetTableData(db *sql.DB, tableName string) ([]map[string]interface{}, error) {
 	// Экранируем имя таблицы с помощью pgx.Identifier для безопасности.

@@ -8,7 +8,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Config holds application configuration.
+// Config хранит настройки приложения.
 type Config struct {
 	DBHost     string
 	DBPort     int
@@ -19,12 +19,11 @@ type Config struct {
 	AppPort    string
 }
 
-// LoadConfig loads configuration from .env file or environment variables.
+// LoadConfig загружает конфигурацию из .env или переменных окружения.
 func LoadConfig() *Config {
-	// Загружаем .env файл. Если его нет, используются системные переменные окружения.
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("Предупреждение: не удалось загрузить .env файл. Используются переменные окружения.")
+		log.Println("Предупреждение: .env не найден. Используются переменные окружения.")
 	}
 
 	cfg := &Config{
@@ -37,25 +36,24 @@ func LoadConfig() *Config {
 		AppPort:    "8080", // Порт приложения по умолчанию
 	}
 
-	// Парсим порт БД из переменной окружения
+	// Парсинг порта БД из переменной окружения.
 	if dbPortStr := os.Getenv("DB_PORT"); dbPortStr != "" {
 		if port, err := strconv.Atoi(dbPortStr); err == nil {
 			cfg.DBPort = port
 		} else {
-			log.Printf("Предупреждение: неверный формат порта БД: %v. Используется значение по умолчанию 5432.", err)
+			log.Printf("Предупреждение: неверный формат порта БД. Используется 5432.")
 		}
 	}
 
-	// Применяем порт приложения из переменной окружения
+	// Применение порта приложения из переменной окружения.
 	if appPort := os.Getenv("APP_PORT"); appPort != "" {
 		cfg.AppPort = appPort
 	}
 
-	// Проверяем наличие обязательных переменных для подключения к БД.
+	// Проверка обязательных переменных БД.
 	if cfg.DBHost == "" || cfg.DBUser == "" || cfg.DBName == "" {
-		log.Fatal("Ошибка: не все обязательные переменные для подключения к БД определены (DB_HOST, DB_USER, DB_NAME).")
+		log.Fatal("Ошибка: не все обязательные переменные БД определены (DB_HOST, DB_USER, DB_NAME).")
 	}
-	// Устанавливаем режим SSL по умолчанию, если не указан.
 	if cfg.DBSslMode == "" {
 		cfg.DBSslMode = "disable"
 	}

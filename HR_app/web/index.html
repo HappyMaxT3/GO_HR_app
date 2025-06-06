@@ -3,64 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HR База Данных</title>
+    <title>HR-Система</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="theme-toggle" class="theme-toggle-button" title="Переключить тему">
+
+    <button id="theme-toggle" class="theme-toggle-button" aria-label="Переключить тему">
         <span class="theme-icon"></span>
     </button>
 
-    <div id="role-selector" class="panel">
-        <div class="role-selector-header">
-            <h2>Выберите роль:</h2>
-            </div>
-        <button id="role-employee" onclick="setRole('Сотрудник')">Сотрудник</button>
-        <button id="role-hr" onclick="setRole('HR-менеджер')">HR-менеджер</button>
-        <button id="role-head" onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
-        <button id="role-admin" onclick="setRole('Администраторы отделов')">Администратор отдела</button>
-        <button id="role-finance" onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
-        <button id="role-management" onclick="setRole('Руководство организации')">Руководство организации</button>
-        <p>Активная роль: <span id="current-role">Не выбрана</span></p>
-    </div>
+    <h1>Панель управления HR-системой</h1>
 
-    <h1>Система Управления Персоналом</h1>
+    <div id="role-menu-bar" class="panel">
+        <div class="role-buttons-container">
+            <button onclick="setRole('Сотрудник')">Сотрудник</button>
+            <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
+            <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
+            <button onclick="setRole('Администраторы отделов')">Администраторы отделов</button>
+            <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
+            <button onclick="setRole('Руководство организации')">Руководство организации</button>
+            <button onclick="setRole('старт')">Выйти</button>
+        </div>
+        <p class="current-role-info">Активная роль: <b id="current-role">Не выбрана</b></p>
+    </div>
 
     <div class="container-wrapper">
         <div id="main-menu" class="panel">
-            <h2>Доступные таблицы</h2>
-            <div id="table-buttons-container"></div>
-            <p>Выбрана таблица: <span id="current-table-name">Не выбрана</span></p>
+            <div id="table-selection">
+                <h3>Доступные таблицы (просмотр)</h3>
+                <div id="table-buttons-container">
+                    <p>Выберите роль для доступа к таблицам.</p>
+                </div>
+            </div>
             <hr>
-            <h3>Редактирование данных</h3>
-            <p>Выберите таблицу для редактирования:</p>
-            <div id="editable-table-buttons-container"></div>
-        </div>
-
-        <div id="crud-panel" class="panel">
-            <h2>Управление данными (<span id="crud-table-name">Не выбрана</span>)</h2>
-            <div class="crud-actions">
-                <button id="add-button" onclick="showForm('add')">Добавить запись</button>
-                <button id="update-button" onclick="showForm('update')">Изменить запись</button>
-                <button id="delete-button" onclick="showForm('delete')">Удалить запись</button>
+            <div id="editable-table-selection">
+                <h3>Редактирование данных</h3>
+                <div id="editable-table-buttons-container">
+                    <p>Выберите роль для доступа к редактированию.</p>
+                </div>
             </div>
-            <div id="crud-form-container">
-                <p>Выберите действие.</p>
+            <div id="view-selection">
+                <h3>Доступные представления (отчеты)</h3>
+                <div id="view-buttons-container">
+                    <p>Выберите роль для просмотра отчетов.</p>
+                </div>
             </div>
         </div>
 
-        <div id="editable-data-panel" class="panel">
-            <h2>Редактируемые данные: <span id="editable-table-name">Не выбрана</span></h2>
-            <div id="editable-table-container">
-                <p>Выберите таблицу для редактирования.</p>
+        <div id="content-column">
+            <div id="data-display" class="panel">
+                <h2>Просмотр данных: <span id="current-table-name">Не выбрана</span></h2>
+                <div class="table-scroll-container">
+                    <div id="table-container">
+                        <p>Выберите таблицу из меню слева для просмотра.</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div id="data-display" class="panel">
-        <h2>Результаты запроса:</h2>
-        <div id="table-container">
-            <p>Выберите опцию выше, чтобы увидеть данные.</p>
+            <div id="editable-data-panel" class="panel">
+                <h2>Редактор: <span id="editable-table-name">Не выбрана</span></h2>
+                <div class="crud-actions">
+                    <button id="add-button">Добавить запись</button>
+                </div>
+                <div class="table-scroll-container">
+                    <div id="editable-table-container">
+                        <p>Выберите таблицу в секции "Редактирование данных", чтобы начать работу.</p>
+                    </div>
+                </div>
+                <div id="crud-form-container" class="crud-form">
+                </div>
+                 <div id="message-container"></div>
+            </div>
         </div>
     </div>
 
@@ -75,7 +88,7 @@
             <div class="footer-section links">
                 <h3>Полезные ссылки</h3>
                 <ul>
-                    <li><a href="ссылка_на_доку" target="_blank">Документация проекта</a></li>
+                    <li><a href="https://docs.google.com/document/d/1_1DCMREUy3ipAXGL_kYXFhIg3QTP5WRg/edit?usp=sharing&ouid=102457244083468647396&rtpof=true&sd=true" target="_blank">Документация проекта</a></li>
                     <li><a href="https://github.com/HappyMaxT3/GO_HR_app" target="_blank">GitHub Проекта</a></li>
                 </ul>
             </div>

@@ -1,62 +1,68 @@
+/* --- Общие стили для всего документа и переходы для элементов темы --- */
 body {
-    font-family: Arial, sans-serif; /* Использован Arial */
+    font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #f4f7f6; /* Светлый фон по умолчанию */
-    color: #333; /* Темный текст по умолчанию */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Плавный переход для фона и основного текста */
+    background-color: #f4f7f6;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 /* --- Контейнер для основных панелей --- */
 .container-wrapper {
     display: flex;
-    gap: 20px; /* Промежуток между flex-элементами */
-    flex-wrap: wrap; /* Разрешает перенос элементов на новую строку */
-    justify-content: flex-start; /* Выравнивание элементов по началу контейнера */
-    margin-bottom: 20px; /* Отступ снизу, чтобы отделить от #data-display */
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    align-items: flex-start;
 }
 
 /* --- Общие стили для всех панелей --- */
 .panel {
-    background-color: #fff; /* Светлый фон панелей по умолчанию */
-    border: 1px solid #e0e0e0; /* Светлая граница */
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Легкая тень */
-    /* Плавный переход для фона, границ, теней и цвета текста */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
 /* --- Заголовки --- */
 h1 {
-    color: #2c3e50; /* Темно-синий */
+    color: #2c3e50;
     text-align: center;
     margin-bottom: 30px;
-    transition: color 0.3s ease; /* Плавный переход для заголовков */
+    transition: color 0.3s ease;
 }
 
 h2 {
-    color: #34495e; /* Чуть светлее, чем H1 */
+    color: #34495e;
     margin-top: 0;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
     margin-bottom: 15px;
-    transition: color 0.3s ease, border-color 0.3s ease; /* Плавный переход для заголовков и их границ */
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 h3 {
-    color: #34495e; /* Такой же как H2 */
-    transition: color 0.3s ease; /* Плавный переход для заголовков */
+    color: #34495e;
+    transition: color 0.3s ease;
 }
 
 /* --- Параграфы и текст --- */
 p {
-    color: #555; /* Средне-серый текст */
+    color: #555;
     line-height: 1.5;
-    transition: color 0.3s ease; /* Плавный переход для текста */
+    transition: color 0.3s ease;
 }
 
 a {
-    color: #007bff; /* Цвет ссылок */
+    color: #007bff;
     transition: color 0.3s ease;
 }
 a:hover {
@@ -66,18 +72,18 @@ a:hover {
 /* --- Кнопки (общие стили) --- */
 button {
     padding: 10px 15px;
-    margin: 5px; /* Объединил margin-right и margin-bottom */
+    margin: 5px;
     border: none;
     border-radius: 5px;
-    background-color: #3498db; /* Ярко-синий */
+    background-color: #3498db;
     color: white;
     cursor: pointer;
-    font-size: 14px; /* Чуть меньше */
-    transition: background-color 0.3s ease, transform 0.1s ease, color 0.3s ease; /* Плавный переход */
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.1s ease, color 0.3s ease;
 }
 
 button:hover {
-    background-color: #2980b9; /* Темнее синий */
+    background-color: #2980b9;
     transform: translateY(-1px);
 }
 
@@ -87,21 +93,21 @@ button:active {
 
 /* --- Специфические стили для кнопок CRUD --- */
 .crud-actions button {
-    display: none; /* Скрываем по умолчанию, управляется JS */
-    background-color: #2ecc71; /* Зеленый для "Добавить" */
+    display: none;
+    background-color: #2ecc71;
 }
-.crud-actions button:nth-child(2) { /* "Изменить" */
-    background-color: #f39c12; /* Оранжевый */
+.crud-actions button:nth-child(2) {
+    background-color: #f39c12;
 }
-.crud-actions button:nth-child(3) { /* "Удалить" */
-    background-color: #e74c3c; /* Красный */
+.crud-actions button:nth-child(3) {
+    background-color: #e74c3c;
 }
 .crud-actions button:hover {
-    filter: brightness(90%); /* Просто затемняет цвет при наведении */
+    filter: brightness(90%);
 }
 
-.delete-button-row { /* Конкретно для кнопки удаления в таблице */
-    background-color: #dc3545; /* Красная кнопка */
+.delete-button-row {
+    background-color: #dc3545;
 }
 .delete-button-row:hover {
     background-color: #c82333;
@@ -116,36 +122,36 @@ table {
 }
 
 th, td {
-    border: 1px solid #ddd; /* Светлая граница */
+    border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
-    color: #333; /* Явно задаем цвет текста для ячеек */
+    color: #333;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 th {
-    background-color: #ecf0f1; /* Светло-серый фон заголовков */
-    color: #2c3e50; /* Темный текст заголовков */
+    background-color: #ecf0f1;
+    color: #2c3e50;
     font-weight: bold;
     text-transform: uppercase;
 }
 
 tbody tr:nth-child(even) {
-    background-color: #f9f9f9; /* Светло-серый для четных строк */
+    background-color: #f9f9f9;
 }
 tbody tr:hover {
-    background-color: #e0e0e0; /* Более темный серый при наведении */
+    background-color: #e0e0e0;
 }
 
 /* --- Стили для форм CRUD и редактирования --- */
 .crud-form, .edit-form-content {
     margin-top: 20px;
-    border-top: 1px solid #eee; /* Верхняя граница для .crud-form */
-    padding-top: 20px; /* Отступ сверху для содержимого формы */
-    background-color: #f9f9f9; /* Фон форм */
-    border: 1px solid #eee; /* Граница формы */
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
     border-radius: 5px;
-    padding: 15px; /* Дополнительный padding для edit-form-content (и для .crud-form в целом) */
+    padding: 15px;
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
@@ -153,33 +159,33 @@ tbody tr:hover {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #34495e; /* Темный цвет для лейблов */
+    color: #34495e;
     transition: color 0.3s ease;
 }
 
 .crud-form input[type="text"],
 .crud-form input[type="number"],
 .crud-form input[type="date"],
-.edit-form-content input { /* Объединенные правила для инпутов */
-    width: calc(100% - 22px); /* 100% минус padding и border */
+.edit-form-content input {
+    width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
-    background-color: #fff; /* Фон инпутов */
-    color: #333; /* Цвет текста в инпутах */
+    background-color: #fff;
+    color: #333;
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .crud-form input:focus, .edit-form-content input:focus {
-    outline: 2px solid #3498db; /* Подсветка при фокусе */
+    outline: 2px solid #3498db;
     background-color: #ffffff;
 }
 
-.crud-form button { /* Отдельно для кнопки в форме CRUD */
+.crud-form button {
     margin-top: 10px;
-    width: auto; /* Позволяет кнопке быть по ширине содержимого */
+    width: auto;
     background-color: #3498db;
 }
 
@@ -216,7 +222,7 @@ tbody tr:hover {
 
 /* --- Стили для редактируемых ячеек --- */
 td[contenteditable="true"] {
-    background-color: #fffacd; /* Светло-желтый фон */
+    background-color: #fffacd;
     border: 1px dashed #ccc;
     min-width: 50px;
 }
@@ -228,54 +234,58 @@ td[contenteditable="true"]:focus {
 
 /* --- Расположение основных блоков на странице --- */
 #role-selector {
-    width: 100%; /* Занимает всю ширину сверху */
+    width: 100%;
     margin-bottom: 20px;
-    /* text-align: center; -- Удалено, т.к. flexbox лучше справится */
 }
 
 #main-menu {
-    flex: 0 0 280px; /* Не сжимается, не растягивается, базовая ширина 280px */
+    flex: 0 0 280px;
     min-width: 280px;
 }
 
 #crud-panel {
-    flex: 1; /* Растягивается, чтобы заполнить оставшееся место */
+    flex: 1;
     min-width: 350px;
 }
 
 #editable-data-panel {
-    flex: 2; /* Растягивается в два раза больше, чем crud-panel */
+    flex: 2;
     min-width: 450px;
-    overflow-x: auto; /* Горизонтальная прокрутка, если содержимое не помещается */
+    overflow-x: auto;
 }
 
-/* #data-display находится вне .container-wrapper, поэтому он является обычным блочным элементом */
 #data-display {
-    margin-top: 20px; /* Отступ от .container-wrapper */
-    overflow-x: auto; /* Для горизонтальной прокрутки таблиц */
+    margin-top: 20px;
+    overflow-x: auto;
+    margin-bottom: 20px;
 }
 
 
 /* --- Организация верхней панели с ролями и кнопкой темы --- */
 .role-selector-header {
     display: flex;
-    justify-content: space-between; /* Заголовок h2 слева, кнопка темы справа */
-    align-items: center; /* Выравнивание по центру по вертикали */
-    margin-bottom: 15px; /* Отступ от кнопок ролей */
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 /* --- Стили для кнопки переключения темы (круглая и тематическая) --- */
 .theme-toggle-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+
     width: 40px;
     height: 40px;
-    border-radius: 50%; /* Круглая форма */
-    padding: 0; /* Убираем внутренние отступы */
-    display: flex; /* Для центрирования иконки */
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 20px; /* Размер иконки, если это текстовый символ */
-    background-color: #6c757d; /* Нейтральный серый */
-    color: white; /* Цвет иконки/текста внутри кнопки */
+    font-size: 20px;
+    background-color: #6c757d;
+    color: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     border: 2px solid #5a6268;
     transition: background-color 0.3s ease, transform 0.1s ease, border-color 0.3s ease;
@@ -283,7 +293,7 @@ td[contenteditable="true"]:focus {
 
 .theme-toggle-button:hover {
     background-color: #5a6268;
-    transform: translateY(-1px) scale(1.05); /* Легкий эффект увеличения */
+    transform: translateY(-1px) scale(1.05);
 }
 
 .theme-toggle-button:active {
@@ -294,7 +304,7 @@ td[contenteditable="true"]:focus {
     display: block;
     width: 20px;
     height: 20px;
-    background-color: currentColor; /* Иконка будет цветом текста кнопки */
+    background-color: currentColor;
     border-radius: 50%;
     position: relative;
     transition: all 0.3s ease;
@@ -302,7 +312,7 @@ td[contenteditable="true"]:focus {
 
 /* Иконка солнца по умолчанию (светлая тема) */
 .theme-icon {
-    background-color: gold; /* Цвет солнца */
+    background-color: gold;
     box-shadow: 0 0 5px gold;
 }
 .theme-icon::before, .theme-icon::after {
@@ -311,55 +321,124 @@ td[contenteditable="true"]:focus {
     background-color: gold;
     transition: all 0.3s ease;
 }
-.theme-icon::before { /* Верхний и нижний лучи */
+.theme-icon::before {
     width: 2px;
     height: 6px;
     top: -8px;
-    left: 9px; /* Центрируем по горизонтали */
+    left: 9px;
     transform-origin: center center;
 }
-.theme-icon::after { /* Левый и правый лучи (повернуты) */
+.theme-icon::after {
     width: 2px;
     height: 6px;
     top: 9px;
-    left: -8px; /* Центрируем по вертикали */
+    left: -8px;
     transform-origin: center center;
     transform: rotate(90deg);
 }
 
 
+/* --- Стили для ФУТЕРА (теперь с классом .panel) --- */
+.site-footer {
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.site-footer .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+}
+
+.site-footer .footer-section {
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+}
+
+.site-footer .footer-section h3 {
+    color: #34495e;
+    margin-bottom: 15px;
+    transition: color 0.3s ease;
+}
+
+.site-footer .footer-section p {
+    margin-bottom: 8px;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.site-footer .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.site-footer .footer-section ul li {
+    margin-bottom: 8px;
+}
+
+.site-footer .footer-section ul li a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.site-footer .footer-section ul li a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.site-footer .footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 0.9em;
+    color: #555;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+
 /* --- Стили для ТЕМНОЙ ТЕМЫ (применяются при наличии класса .dark-theme на body) --- */
 body.dark-theme {
-    background-color: #2c2c2c; /* Темный фон для body */
-    color: #f0f0f0; /* Светлый основной текст */
+    background-color: #2c2c2c;
+    color: #f0f0f0;
 }
 
 body.dark-theme .panel {
-    background-color: #3a3a3a; /* Темнее фон панелей */
+    background-color: #3a3a3a;
     border-color: #555;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); /* Более выраженная тень */
-    color: #f0f0f0; /* Обеспечиваем, что текст внутри панели тоже светлый */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    color: #f0f0f0;
 }
 
 body.dark-theme h1,
 body.dark-theme h2,
 body.dark-theme h3 {
-    color: #8ed1fc; /* Более светлый цвет заголовков */
+    color: #8ed1fc;
+}
+body.dark-theme h2 {
+    border-color: #555;
 }
 
+
 body.dark-theme p {
-    color: #cccccc; /* Более светлый текст для параграфов */
+    color: #cccccc;
 }
 
 body.dark-theme a {
-    color: #92d4ff; /* Светлее ссылки */
+    color: #92d4ff;
 }
 body.dark-theme a:hover {
     color: #6cb6eb;
 }
 
 body.dark-theme button {
-    background-color: #555; /* Темнее фон кнопок */
+    background-color: #555;
     color: #eee;
 }
 
@@ -369,13 +448,13 @@ body.dark-theme button:hover {
 
 /* Кнопки CRUD в темной теме */
 body.dark-theme .crud-actions button {
-    background-color: #228b4c; /* Темнее зеленый */
+    background-color: #228b4c;
 }
 body.dark-theme .crud-actions button:nth-child(2) {
-    background-color: #b07010; /* Темнее оранжевый */
+    background-color: #b07010;
 }
 body.dark-theme .crud-actions button:nth-child(3) {
-    background-color: #b3392e; /* Темнее красный */
+    background-color: #b3392e;
 }
 
 /* Таблицы в темной теме */
@@ -383,49 +462,49 @@ body.dark-theme table {
     border-color: #555;
 }
 body.dark-theme th {
-    background-color: #444; /* Темнее фон заголовков таблицы */
-    color: #eee; /* Светлый текст заголовков */
+    background-color: #444;
+    color: #eee;
     border-color: #555;
 }
 body.dark-theme td {
-    background-color: #3a3a3a; /* Фон ячеек таблицы такой же как у панелей */
-    color: #f0f0f0; /* Светлый текст в ячейках */
+    background-color: #3a3a3a;
+    color: #f0f0f0;
     border-color: #555;
 }
 body.dark-theme tbody tr:nth-child(even) {
-    background-color: #424242; /* Немного темнее для четных строк */
+    background-color: #424242;
 }
 body.dark-theme tbody tr:hover {
-    background-color: #4f4f4f; /* Более светлый фон при наведении */
+    background-color: #4f4f4f;
 }
 
 
 /* Формы в темной теме */
 body.dark-theme .crud-form,
 body.dark-theme .edit-form-content {
-    background-color: #4a4a4a; /* Темнее фон форм */
+    background-color: #4a4a4a;
     border-color: #666;
-    color: #f0f0f0; /* Текст в форме */
+    color: #f0f0f0;
 }
 
 body.dark-theme .crud-form label,
 body.dark-theme .edit-form-content label {
-    color: #e0e0e0; /* Светлее лейблы */
+    color: #e0e0e0;
 }
 
 body.dark-theme .crud-form input[type="text"],
 body.dark-theme input[type="number"],
 body.dark-theme input[type="date"],
 body.dark-theme .edit-form-content input {
-    background-color: #555; /* Темнее фон инпутов */
-    color: #eee; /* Светлее текст в инпутах */
+    background-color: #555;
+    color: #eee;
     border-color: #777;
 }
 
 body.dark-theme .crud-form input:focus,
 body.dark-theme .edit-form-content input:focus {
-    outline: none; /* Убираем стандартный outline при фокусе */
-    border-color: #8ed1fc; /* Подсветка при фокусе */
+    outline: none;
+    border-color: #8ed1fc;
 }
 
 /* Сообщения в темной теме */
@@ -451,13 +530,13 @@ body.dark-theme .delete-button-row:hover {
 
 /* Редактируемые ячейки в темной теме */
 body.dark-theme td[contenteditable="true"] {
-    background-color: #4f4f4f; /* Темнее фон */
+    background-color: #4f4f4f;
     border: 1px dashed #777;
     color: #f0f0f0;
 }
 body.dark-theme td[contenteditable="true"]:focus {
     outline: 2px solid #8ed1fc;
-    background-color: #4a4a4a; /* Немного темнее при фокусе */
+    background-color: #4a4a4a;
 }
 
 body.dark-theme .save-button-row button {
@@ -469,7 +548,7 @@ body.dark-theme .save-button-row button:hover {
 
 /* Кнопка переключения темы в темной теме (иконка луны) */
 body.dark-theme .theme-toggle-button {
-    background-color: #333; /* Темнее цвет самой кнопки */
+    background-color: #333;
     border-color: #444;
 }
 body.dark-theme .theme-toggle-button:hover {
@@ -477,16 +556,42 @@ body.dark-theme .theme-toggle-button:hover {
 }
 
 body.dark-theme .theme-icon {
-    background-color: transparent; /* Убираем фон для имитации полумесяца */
+    background-color: transparent;
     box-shadow: none;
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    box-shadow: inset 8px -8px 0 0 white; /* Белый цвет для луны */
-    transform: rotate(-30deg); /* Для наклона луны */
+    box-shadow: inset 8px -8px 0 0 white;
+    transform: rotate(-30deg);
 }
 
 body.dark-theme .theme-icon::before,
 body.dark-theme .theme-icon::after {
-    content: none; /* Убираем "лучи" солнца */
+    content: none;
+}
+
+/* --- Стили футера в ТЕМНОЙ ТЕМЕ (теперь с классом .panel) --- */
+body.dark-theme .site-footer {
+    color: #e0e0e0;
+}
+
+body.dark-theme .site-footer .footer-section h3 {
+    color: #8ed1fc;
+}
+
+body.dark-theme .site-footer .footer-section p {
+    color: #cccccc;
+}
+
+body.dark-theme .site-footer .footer-section ul li a {
+    color: #92d4ff;
+}
+
+body.dark-theme .site-footer .footer-section ul li a:hover {
+    color: #6cb6eb;
+}
+
+body.dark-theme .site-footer .footer-bottom {
+    border-top-color: #555;
+    color: #cccccc;
 }

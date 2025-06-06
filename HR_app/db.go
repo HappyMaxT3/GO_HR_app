@@ -258,7 +258,7 @@ func parseAndConvertData(tableName string, rawData map[string]interface{}) (map[
 				return nil, fmt.Errorf("неверный тип для колонки %s (ожидался int): %T %v", colNameLower, rawValue, rawValue)
 			}
 		case "float":
-			if rawValue == nil || rawValue == "" { // Обрабатываем nil и пустую строку как nil для float
+			if rawValue == nil || rawValue == "" {
 				convertedData[colNameLower] = nil
 				continue
 			}
@@ -332,7 +332,7 @@ func GenericCRUDOperations(db *sql.DB, tableName string, method string, data map
 		paramCount := 1
 
 		for k, v := range convertedData {
-			if v != nil { // Исключаем nil значения из INSERT, если колонки не NULLABLE
+			if v != nil {
 				columns = append(columns, pgx.Identifier{k}.Sanitize())
 				placeholders = append(placeholders, fmt.Sprintf("$%d", paramCount))
 				args = append(args, v)

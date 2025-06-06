@@ -46,7 +46,6 @@ func setupRoutes(db *sql.DB) {
 	http.HandleFunc("/api/absences_types", crudHandler(db, "absences_types"))
 	http.HandleFunc("/api/employees_education_types", crudHandler(db, "employees_education_types"))
 	http.HandleFunc("/api/employees_contacts_types", crudHandler(db, "employees_contacts_types"))
-	// ... добавьте остальные таблицы, для которых нужен CRUD
 	http.HandleFunc("/api/employees_addresses", crudHandler(db, "employees_addresses"))
 	http.HandleFunc("/api/employees_education", crudHandler(db, "employees_education"))
 	http.HandleFunc("/api/employees_contacts", crudHandler(db, "employees_contacts"))

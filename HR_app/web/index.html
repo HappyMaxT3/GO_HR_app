@@ -14,24 +14,21 @@
 
     <h1>Панель управления HR-системой</h1>
 
+    <div id="role-menu-bar" class="panel">
+        <div class="role-buttons-container">
+            <button onclick="setRole('Сотрудник')">Сотрудник</button>
+            <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
+            <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
+            <button onclick="setRole('Администраторы отделов')">Администраторы отделов</button>
+            <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
+            <button onclick="setRole('Руководство организации')">Руководство организации</button>
+            <button onclick="setRole('старт')">Выйти</button>
+        </div>
+        <p class="current-role-info">Активная роль: <b id="current-role">Не выбрана</b></p>
+    </div>
+
     <div class="container-wrapper">
         <div id="main-menu" class="panel">
-            <div id="role-selector">
-                <div class="role-selector-header">
-                    <h2>Меню</h2>
-                    <span id="current-role-display">Роль: <b id="current-role">Не выбрана</b></span>
-                </div>
-                <div id="role-buttons">
-                    <button onclick="setRole('Сотрудник')">Сотрудник</button>
-                    <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
-                    <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
-                    <button onclick="setRole('Администраторы отделов')">Администраторы отделов</button>
-                    <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
-                    <button onclick="setRole('Руководство организации')">Руководство организации</button>
-                    <button onclick="setRole('старт')">Выйти</button>
-                </div>
-            </div>
-            <hr>
             <div id="table-selection">
                 <h3>Доступные таблицы (просмотр)</h3>
                 <div id="table-buttons-container">
@@ -50,8 +47,10 @@
         <div id="content-column">
             <div id="data-display" class="panel">
                 <h2>Просмотр данных: <span id="current-table-name">Не выбрана</span></h2>
-                <div id="table-container">
-                    <p>Выберите таблицу из меню слева для просмотра.</p>
+                <div class="table-scroll-container">
+                    <div id="table-container">
+                        <p>Выберите таблицу из меню слева для просмотра.</p>
+                    </div>
                 </div>
             </div>
 
@@ -60,11 +59,13 @@
                 <div class="crud-actions">
                     <button id="add-button">Добавить запись</button>
                 </div>
-                <div id="editable-table-container">
-                    <p>Выберите таблицу в секции "Редактирование данных", чтобы начать работу.</p>
+                <div class="table-scroll-container">
+                    <div id="editable-table-container">
+                        <p>Выберите таблицу в секции "Редактирование данных", чтобы начать работу.</p>
+                    </div>
                 </div>
                 <div id="crud-form-container" class="crud-form">
-                    </div>
+                </div>
                  <div id="message-container"></div>
             </div>
         </div>

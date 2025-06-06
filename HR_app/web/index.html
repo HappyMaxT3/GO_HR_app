@@ -3,89 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HR База Данных</title>
+    <title>HR-Система</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="theme-toggle" class="theme-toggle-button" title="Переключить тему">
+
+    <button id="theme-toggle" class="theme-toggle-button" aria-label="Переключить тему">
         <span class="theme-icon"></span>
     </button>
 
-    <div id="role-selector" class="panel">
-        <div class="role-selector-header">
-            <h2>Выберите роль:</h2>
-            <button id="theme-toggle" class="theme-toggle-button" title="Переключить тему">
-                <span class="theme-icon"></span>
-            </button>
-        </div>
-        <button onclick="setRole('старт')">Роль не выбрана</button>
-        <button onclick="setRole('Сотрудник')">Сотрудник</button>
-        <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
-        <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
-        <button onclick="setRole('Администраторы отделов')">Администратор отдела</button>
-        <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
-        <button onclick="setRole('Руководство организации')">Руководство организации</button>
-        <p>Активная роль: <span id="current-role">Не выбрана</span></p>
-    </div>
-
-    <h1>Система Управления Персоналом</h1>
+    <h1>Панель управления HR-системой</h1>
 
     <div class="container-wrapper">
         <div id="main-menu" class="panel">
-            <h2>Доступные таблицы</h2>
-            <div id="table-buttons-container"></div>
-            <p>Выбрана таблица: <span id="current-table-name">Не выбрана</span></p>
+            <div id="role-selector">
+                <div class="role-selector-header">
+                    <h2>Меню</h2>
+                    <span id="current-role-display">Роль: <b id="current-role">Не выбрана</b></span>
+                </div>
+                <div id="role-buttons">
+                    <button onclick="setRole('Сотрудник')">Сотрудник</button>
+                    <button onclick="setRole('HR-менеджер')">HR-менеджер</button>
+                    <button onclick="setRole('Руководитель отдела')">Руководитель отдела</button>
+                    <button onclick="setRole('Администраторы отделов')">Администраторы отделов</button>
+                    <button onclick="setRole('Финансовый отдел')">Финансовый отдел</button>
+                    <button onclick="setRole('Руководство организации')">Руководство организации</button>
+                    <button onclick="setRole('старт')">Выйти</button>
+                </div>
+            </div>
             <hr>
-            <h3>Редактирование данных</h3>
-            <p>Выберите таблицу для редактирования:</p>
-            <div id="editable-table-buttons-container"></div>
+            <div id="table-selection">
+                <h3>Доступные таблицы (просмотр)</h3>
+                <div id="table-buttons-container">
+                    <p>Выберите роль для доступа к таблицам.</p>
+                </div>
+            </div>
+            <hr>
+            <div id="editable-table-selection">
+                <h3>Редактирование данных</h3>
+                <div id="editable-table-buttons-container">
+                    <p>Выберите роль для доступа к редактированию.</p>
+                </div>
+            </div>
         </div>
 
-        <div id="crud-panel" class="panel">
-            <h2>Управление данными (<span id="crud-table-name">Не выбрана</span>)</h2>
-            <div class="crud-actions">
-                <button id="add-button" onclick="showForm('add')">Добавить запись</button>
-                <button id="update-button" onclick="showForm('update')">Изменить запись</button>
-                <button id="delete-button" onclick="showForm('delete')">Удалить запись</button>
-            </div>
-            <div id="crud-form-container">
-                <p>Выберите действие.</p>
+        <div id="data-display" class="panel">
+            <h2>Просмотр данных: <span id="current-table-name">Не выбрана</span></h2>
+            <div id="table-container">
+                <p>Выберите таблицу из меню слева для просмотра.</p>
             </div>
         </div>
 
         <div id="editable-data-panel" class="panel">
-            <h2>Редактируемые данные: <span id="editable-table-name">Не выбрана</span></h2>
-            <div id="editable-table-container">
-                <p>Выберите таблицу для редактирования.</p>
+            <h2>Редактор: <span id="editable-table-name">Не выбрана</span></h2>
+            <div class="crud-actions">
+                <button id="add-button">Добавить запись</button>
             </div>
-        </div>
-    </div>
-
-    <div id="data-display" class="panel">
-        <h2>Результаты запроса:</h2>
-        <div id="table-container">
-            <p>Выберите опцию выше, чтобы увидеть данные.</p>
+            <div id="editable-table-container">
+                <p>Выберите таблицу в секции "Редактирование данных", чтобы начать работу.</p>
+            </div>
+            <div id="crud-form-container" class="crud-form">
+                </div>
+             <div id="message-container"></div>
         </div>
     </div>
 
     <footer class="site-footer panel">
         <div class="footer-content">
-            <div class="footer-section about">
-                <h3>Разработчики</h3>
-                <p>Толмачев Максим Сергеевич</p>
-                <p>Гудкова Ксения Дмитриевна</p>
-                <p>Акимов Андрей Андреевич</p>
+            <div class="footer-section">
+                <h3>О проекте</h3>
+                <p>Система управления кадрами, разработанная в рамках курсового проекта.</p>
             </div>
-            <div class="footer-section links">
-                <h3>Полезные ссылки</h3>
+            <div class="footer-section">
+                <h3>Навигация</h3>
                 <ul>
-                    <li><a href="ссылка_на_доку" target="_blank">Документация проекта</a></li>
-                    <li><a href="https://github.com/HappyMaxT3/GO_HR_app" target="_blank">GitHub Проекта</a></li>
+                    <li><a href="#role-selector">Выбор роли</a></li>
+                    <li><a href="#data-display">Просмотр данных</a></li>
+                    <li><a href="#editable-data-panel">Редактор</a></li>
                 </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Контактная информация</h3>
+                <p>Email: support@example.com</p>
+                <p>Телефон: +7 (123) 456-78-90</p>
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2025 Система Управления Персоналом. Все права защищены.
+            <p>&copy; 2025 HR-Система. Все права защищены.</p>
         </div>
     </footer>
 

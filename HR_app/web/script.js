@@ -64,8 +64,6 @@ const primaryKeyMapping = {
     'staffing': ['s_id_d', 's_name_p'], 'job': ['j_id_d', 'j_name_p', 'j_id'], 'absences': ['a_id'], 'departments_phones': ['dp_id', 'dp_phone']
 };
 
-// --- ОСНОВНАЯ ЛОГИКА ---
-
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Инициализация роли
     const savedRole = localStorage.getItem('selectedRole');
@@ -79,12 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const roleButtonsContainer = document.querySelector('#role-menu-bar .role-buttons-container');
     if (roleButtonsContainer) {
         roleButtonsContainer.querySelectorAll('button').forEach(button => {
-            // Привязываем обработчик onclick, который уже есть в HTML
-            // Нет необходимости в дополнительных addEventListener здесь,
-            // так как onclick уже прописан в HTML.
-            // Но если бы onclick не было, то делали бы так:
-            // const roleName = button.textContent; // или из data-атрибута, если есть
-            // button.addEventListener('click', () => setRole(roleName));
         });
     }
 
@@ -161,19 +153,23 @@ async function setRole(newRole) {
 function updateUIBasedOnRole() {
     const tableButtonsContainer = document.getElementById('table-buttons-container');
     const editableTableButtonsContainer = document.getElementById('editable-table-buttons-container');
+    const viewButtonsContainer = document.getElementById('view-buttons-container');
     tableButtonsContainer.innerHTML = ''; // Очистка предыдущих кнопок
     editableTableButtonsContainer.innerHTML = ''; // Очистка предыдущих кнопок
+    viewButtonsContainer.innerHTML = ''; // Очистка предыдущих кнопок
 
     const rolePermissions = permissions[currentRole];
     if (!rolePermissions) {
         // Если для роли нет разрешений, отображаем заглушки
         tableButtonsContainer.innerHTML = '<p>Нет таблиц для просмотра.</p>';
         editableTableButtonsContainer.innerHTML = '<p>Нет таблиц для редактирования.</p>';
+        viewButtonsContainer.innerHTML = '<p>Нет представлений для просмотра.</p>';
         return;
     }
 
     let hasReadOnly = false;
     let hasEditable = false;
+    let hasViews = false;
 
     // Объединяем таблицы и представления для перебора
     const allTablesAndViews = { ...rolePermissions.tables, ...rolePermissions.views };
@@ -198,6 +194,16 @@ function updateUIBasedOnRole() {
         }
     }
 
+    if (rolePermissions.views) {
+        for (const viewName in rolePermissions.views) {
+            const button = document.createElement('button');
+            button.textContent = tableDisplayNames[viewName] || viewName;
+            button.onclick = () => showReadOnlyTable(viewName);
+            viewButtonsContainer.appendChild(button);
+            hasViews = true;
+        }
+    }
+
     // Если нет таблиц для просмотра
     if (!hasReadOnly) {
         tableButtonsContainer.innerHTML = '<p>Нет таблиц для просмотра.</p>';
@@ -205,6 +211,9 @@ function updateUIBasedOnRole() {
     // Если нет таблиц для редактирования
     if (!hasEditable) {
         editableTableButtonsContainer.innerHTML = '<p>Нет таблиц для редактирования.</p>';
+    }
+    if (!hasViews) {
+        viewButtonsContainer.innerHTML = '<p>Нет доступных отчетов.</p>';
     }
 }
 
@@ -221,7 +230,7 @@ function clearAllPanels() {
     editableCurrentTableName = '';
 }
 
-// --- ПАНЕЛЬ "ПРОСМОТР ДАННЫХ" (READ-ONLY) ---
+// Панель Просмотр данных
 async function showReadOnlyTable(tableName) {
     currentTableName = tableName;
     editableCurrentTableName = ''; // Убеждаемся, что редактируемая таблица сброшена
@@ -284,7 +293,7 @@ function renderReadOnlyTable(data, tableName) {
     container.appendChild(table);
 }
 
-// --- ПАНЕЛЬ "РЕДАКТОР" (EDITABLE) ---
+// Панель редактирования
 async function showEditableTable(tableName) {
     editableCurrentTableName = tableName;
     currentTableName = ''; // Убеждаемся, что таблица для просмотра сброшена
@@ -316,8 +325,6 @@ function renderEditableTable(data, tableName) {
         return;
     }
     if (!data || data.length === 0) {
-        // Если данных нет, мы все равно хотим отобразить пустую таблицу с заголовками для добавления
-        // Или просто сообщение, если таблица пустая
         container.innerHTML = '<p>Нет данных для редактирования. Вы можете добавить новую запись.</p>';
         return;
     }
@@ -326,8 +333,8 @@ function renderEditableTable(data, tableName) {
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
-    const headers = Object.keys(data[0]); // Получаем заголовки
-    const pkKeys = primaryKeyMapping[tableName] || []; // Получаем ключевые поля для таблицы
+    const headers = Object.keys(data[0]);
+    const pkKeys = primaryKeyMapping[tableName] || [];
 
     const headerRow = document.createElement('tr');
     headers.forEach(h => {
@@ -337,7 +344,7 @@ function renderEditableTable(data, tableName) {
     });
     const thActions = document.createElement('th');
     thActions.textContent = 'Действия';
-    headerRow.appendChild(thActions); // Добавляем столбец "Действия"
+    headerRow.appendChild(thActions);
     thead.appendChild(headerRow);
 
     data.forEach(rowData => {
@@ -400,7 +407,7 @@ function renderEditableTable(data, tableName) {
     container.appendChild(table);
 }
 
-// --- CRUD-ОПЕРАЦИИ И ФОРМЫ ---
+// Операции и формы
 function showForm(action) {
     if (!editableCurrentTableName) {
         alert("Сначала выберите таблицу для редактирования.");
@@ -419,10 +426,6 @@ function showForm(action) {
     const container = document.getElementById('crud-form-container');
     container.innerHTML = `<h3>Добавление новой записи в "${tableDisplayNames[editableCurrentTableName]}"</h3>`;
 
-    // Получаем заголовки (имена колонок) для построения формы
-    // Можно получить их из primaryKeyMapping, если таблица может быть пустой,
-    // или сделать запрос к API, чтобы получить структуру.
-    // Для простоты пока запросим данные, чтобы получить заголовки.
     fetch(`/api/data?table=${editableCurrentTableName}`)
         .then(res => res.json())
         .then(data => {
@@ -444,8 +447,6 @@ function createFormFields(headers, tableName) {
     form.onsubmit = e => {
         e.preventDefault();
         const formData = Object.fromEntries(new FormData(e.target).entries());
-        // Очищаем пустые строки из formData, чтобы они не отправлялись как пустые строки в БД,
-        // где ожидается NULL.
         for (const key in formData) {
             if (formData[key] === '') {
                 delete formData[key];
@@ -463,17 +464,15 @@ function createFormFields(headers, tableName) {
         const input = document.createElement('input');
         input.name = header;
 
-        // Определяем тип инпута для даты
         if (header.includes('date') || header.includes('born') || header.includes('start') || header.includes('end')) {
             input.type = 'date';
         } else {
             input.type = 'text';
         }
 
-        if (pkKeys.includes(header)) { 
-            // input.readOnly = true;
-
-        }
+        // if (pkKeys.includes(header)) { 
+        //     input.readOnly = true;
+        // }
 
         form.append(label, input);
     });
@@ -534,7 +533,7 @@ async function submitCrud(method, data) {
     }
 }
 
-// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+// Вспомогательные функции
 function displayMessage(message, type) {
     const container = document.getElementById('message-container');
     container.innerHTML = `<p class="${type}-message">${message}</p>`;
@@ -542,7 +541,7 @@ function displayMessage(message, type) {
     setTimeout(() => container.innerHTML = '', 4000);
 }
 
-// Форматирование содержимого ячейки (например, дат)
+// Форматирование содержимого ячейки
 function formatCell(value, header) {
     if (value === null || typeof value === 'undefined') {
         return 'NULL';

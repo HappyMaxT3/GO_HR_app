@@ -1,12 +1,22 @@
 # HR Database Application (Go) 🧑‍💼🏢
 
-This project is a simple command-line application built with Go that allows you to manage an HR database. Currently, it provides functionalities for managing:
+This project is a website built with Go that allows you to manage an HR database. Currently, it provides functionalities for managing:
 
 * Absence Types 🗓️
 * Education Types 🎓
 * Employee Contact Types 📞📧
 
 This application is containerized using Docker 🐳 for easy setup and deployment.
+
+## Screenshots
+
+![start page](telegram-cloud-photo-size-2-5361602482884702698-y.jpg)
+start page (light theme)
+![start page](telegram-cloud-photo-size-2-5364282224649827390-y.jpg)
+start page (dark theme)
+![processing page](telegram-cloud-photo-size-2-5364282224649827391-y.jpg)
+![processing page](telegram-cloud-photo-size-2-5364282224649827392-y.jpg)
+processing page with role
 
 ## Getting Started 🚀
 
